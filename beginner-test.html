@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>İngilizce Testleri - A1 ve A2</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h2 {
+      margin-top: 0;
+      text-align: center; /* Başlıkları ortala */
+    }
+    .btn-group {
+      text-align: center; /* Buton grubunu ortala */
+      margin-bottom: 20px;
+    }
+    .btn-group button {
+      margin: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
+    }
+    .btn-group button.active {
+      background-color: #0056b3;
+    }
+    form {
+      margin-top: 20px;
+    }
+    fieldset {
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      position: relative;
+    }
+    legend {
+      font-weight: bold;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .hidden {
+      display: none;
+    }
+    .feedback {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-weight: bold;
+    }
+    .feedback.correct {
+      color: green;
+    }
+    .feedback.incorrect {
+      color: red;
+    }
+    .form-container {
+      background-color: rgb(232, 192, 203);
+      padding: 20px 25px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 80%;
+      max-width: 300px;
+      margin: 20px auto;
+      display: none;
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border 0.3s;
+      box-sizing: border-box;
+    }
+    .form-container input:focus {
+      border-color: #003366;
+      outline: none;
+    }
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-container button:hover {
+      background-color: #005f73;
+    }
+    .form-container p {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .form-container a {
+      color: #003366;
+      text-decoration: none;
+    }
+    .form-container a:hover {
+      text-decoration: underline;
+    }
+    #auth-section {
+      text-align: center;
+      margin-top: 50px;
+    }
+    #auth-section h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+      <a href="index.html" style="text-decoration: none; color: black; font-weight: bold;">Anasayfa</a>
+  </header>
+
+  <div id="auth-section">
+    <h2>İngilizce Testlerine Erişmek İçin Lütfen Giriş Yapın veya Kayıt Olun</h2>
+
+    <div class="form-container" id="register-form">
+      <h2>Kayıt Ol</h2>
+      <form id="registerForm">
+        <input type="text" id="fullname" placeholder="Ad Soyad" required>
+        <input type="email" id="email" placeholder="E-posta" required>
+        <input type="number" id="telefon" placeholder="Telefon" required>
+        <input type="password" id="password" placeholder="Şifre" required>
+        <button type="submit">Kayıt Ol</button>
+      </form>
+      <p>Zaten üye misiniz? <a href="#" id="show-login">Giriş yap</a></p>
+    </div>
+
+    <div class="form-container" id="login-form">
+      <h2>Giriş Yap</h2>
+      <form id="loginForm">
+        <input type="email" id="login-email" placeholder="E-posta" required>
+        <input type="password" id="login-password" placeholder="Şifre" required>
+        <button type="submit">Giriş Yap</button>
+      </form>
+      <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt ol</a></p>
+    </div>
+  </div>
+
+  <div id="test-content" class="container hidden">
+    <h2>İngilizce Testleri - A1 ve A2</h2>
+
+    <div class="btn-group">
+      <button id="showA1" class="active">A1 Seviye Testi</button>
+      <button id="showA2">A2 Seviye Testi</button>
+    </div>
+
+    <div id="testA1">
+      <h3>A1 Seviye Testi</h3>
+      <form id="formA1">
+        <fieldset>
+          <legend>1. Hello, I _____ John.</legend>
+          <label><input type="radio" name="q1" value="am"> am</label>
+          <label><input type="radio" name="q1" value="is"> is</label>
+          <label><input type="radio" name="q1" value="are"> are</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. This is my friend. _____ name is Sarah.</legend>
+          <label><input type="radio" name="q2" value="Her"> Her</label>
+          <label><input type="radio" name="q2" value="His"> His</label>
+          <label><input type="radio" name="q2" value="Its"> Its</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. How _____ you?</legend>
+          <label><input type="radio" name="q3" value="are"> are</label>
+          <label><input type="radio" name="q3" value="is"> is</label>
+          <label><input type="radio" name="q3" value="am"> am</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. I _____ from Turkey.</legend>
+          <label><input type="radio" name="q4" value="am"> am</label>
+          <label><input type="radio" name="q4" value="is"> is</label>
+          <label><input type="radio" name="q4" value="are"> are</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>5. _____ is your phone number?</legend>
+          <label><input type="radio" name="q5" value="What"> What</label>
+          <label><input type="radio" name="q5" value="Where"> Where</label>
+          <label><input type="radio" name="q5" value="Who"> Who</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>6. She _____ a student.</legend>
+          <label><input type="radio" name="q6" value="is"> is</label>
+          <label><input type="radio" name="q6" value="are"> are</label>
+          <label><input type="radio" name="q6" value="am"> am</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>7. We _____ happy.</legend>
+          <label><input type="radio" name="q7" value="are"> are</label>
+          <label><input type="radio" name="q7" value="is"> is</label>
+          <label><input type="radio" name="q7" value="am"> am</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>8. They _____ at home.</legend>
+          <label><input type="radio" name="q8" value="are"> are</label>
+          <label><input type="radio" name="q8" value="is"> is</label>
+          <label><input type="radio" name="q8" value="am"> am</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>9. This is _____ apple.</legend>
+          <label><input type="radio" name="q9" value="an"> an</label>
+          <label><input type="radio" name="q9" value="a"> a</label>
+          <label><input type="radio" name="q9" value="the"> the</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>10. I have _____ car.</legend>
+          <label><input type="radio" name="q10" value="a"> a</label>
+          <label><input type="radio" name="q10" value="an"> an</label>
+          <label><input type="radio" name="q10" value="the"> the</label>
+        </fieldset>
+
+        <button type="button" onclick="checkAnswers('A1')">Sonuçları Gör</button>
+      </form>
+      <div id="resultA1"></div>
+    </div>
+
+    <div id="testA2" class="hidden">
+      <h3>A2 Seviye Testi</h3>
+      <form id="formA2">
+        <fieldset>
+          <legend>1. She usually _____ to work by bus.</legend>
+          <label><input type="radio" name="q1" value="goes"> goes</label>
+          <label><input type="radio" name="q1" value="go"> go</label>
+          <label><input type="radio" name="q1" value="going"> going</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. What _____ you do yesterday?</legend>
+          <label><input type="radio" name="q2" value="did"> did</label>
+          <label><input type="radio" name="q2" value="do"> do</label>
+          <label><input type="radio" name="q2" value="are"> are</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. I have _____ visited London.</legend>
+          <label><input type="radio" name="q3" value="never"> never</label>
+          <label><input type="radio" name="q3" value="ever"> ever</label>
+          <label><input type="radio" name="q3" value="yet"> yet</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. We _____ dinner when he called.</legend>
+          <label><input type="radio" name="q4" value="were having"> were having</label>
+          <label><input type="radio" name="q4" value="had"> had</label>
+          <label><input type="radio" name="q4" value="have"> have</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>5. If it _____ tomorrow, we won't go out.</legend>
+          <label><input type="radio" name="q5" value="rains"> rains</label>
+          <label><input type="radio" name="q5" value="will rain"> will rain</label>
+          <label><input type="radio" name="q5" value="rained"> rained</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>6. He's good _____ playing the guitar.</legend>
+          <label><input type="radio" name="q6" value="at"> at</label>
+          <label><input type="radio" name="q6" value="on"> on</label>
+          <label><input type="radio" name="q6" value="in"> in</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>7. There _____ a lot of books on the shelf.</legend>
+          <label><input type="radio" name="q7" value="are"> are</label>
+          <label><input type="radio" name="q7" value="is"> is</label>
+          <label><input type="radio" name="q7" value="was"> was</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>8. How much money _____ you have?</legend>
+          <label><input type="radio" name="q8" value="do"> do</label>
+          <label><input type="radio" name="q8" value="does"> does</label>
+          <label><input type="radio" name="q8" value="are"> are</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>9. She _____ finished her homework yet.</legend>
+          <label><input type="radio" name="q9" value="hasn't"> hasn't</label>
+          <label><input type="radio" name="q9" value="haven't"> haven't</label>
+          <label><input type="radio" name="q9" value="isn't"> isn't</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>10. I think it _____ be sunny tomorrow.</legend>
+          <label><input type="radio" name="q10" value="will"> will</label>
+          <label><input type="radio" name="q10" value="is"> is</label>
+          <label><input type="radio" name="q10" value="can"> can</label>
+        </fieldset>
+
+        <button type="button" onclick="checkAnswers('A2')">Sonuçları Gör</button>
+      </form>
+      <div id="resultA2"></div>
+    </div>
+    <br>
+    <a href="index.html">Anasayfaya dön</a>
+  </div> <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA26XLG7jdLhyZ6HyzhuapXON-kCn0jNd4", // Kendi Firebase API anahtarınız
+      authDomain: "learnenglish-b0777.firebaseapp.com",
+      projectId: "learnenglish-b0777",
+      storageBucket: "learnenglish-b0777.appspot.com",
+      messagingSenderId: "547469954131",
+      appId: "1:547469954131:web:1869e9a6c702bffad04aa6",
+      measurementId: "G-6F3C3SXK32"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // HTML elementlerini al
+    const authSection = document.getElementById('auth-section');
+    const registerFormContainer = document.getElementById('register-form');
+    const loginFormContainer = document.getElementById('login-form');
+    const testContent = document.getElementById('test-content');
+
+    // Oturum durumuna göre formları veya testi göster
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Kullanıcı giriş yapmışsa
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists() && userDocSnap.data().isAdmin) {
+          // Admin ise admin sayfasına yönlendir
+          window.location.href = "admin.html";
+        } else {
+          // Admin değilse veya belge bulunamazsa, test içeriğini göster
+          authSection.style.display = 'none';
+          testContent.classList.remove('hidden'); // 'hidden' sınıfını kaldır
+        }
+      } else {
+        // Kullanıcı giriş yapmamışsa: Giriş/Kayıt formlarını göster
+        authSection.style.display = 'block';
+        registerFormContainer.style.display = 'block'; // Varsayılan olarak kayıt formunu göster
+        loginFormContainer.style.display = 'none';
+        testContent.classList.add('hidden'); // Test içeriğini gizle
+      }
+    });
+
+    // Formlar arası geçiş
+    document.getElementById("show-login").addEventListener("click", (e) => {
+      e.preventDefault();
+      registerFormContainer.style.display = "none";
+      loginFormContainer.style.display = "block";
+    });
+
+    document.getElementById("show-register").addEventListener("click", (e) => {
+      e.preventDefault();
+      loginFormContainer.style.display = "none";
+      registerFormContainer.style.display = "block";
+    });
+
+    // Kayıt Formu Gönderme
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefon = document.getElementById("telefon").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          ad: fullname.split(" ")[0] || fullname,
+          soyad: fullname.split(" ")[1] || "",
+          email: email,
+          telefon: telefon,
+          isAdmin: false
+        });
+
+        alert("Kayıt başarılı! Giriş yaptınız ve teste erişebilirsiniz.");
+        authSection.style.display = 'none';
+        testContent.classList.remove('hidden');
+
+      } catch (error) {
+        alert("Kayıt hatası: " + error.message);
+      }
+    });
+
+    // Giriş Formu Gönderme
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.isAdmin) {
+            alert("Giriş başarılı. Admin sayfasına yönlendiriliyorsun!");
+            window.location.href = "admin.html";
+          } else {
+            alert("Giriş başarılı. Teste erişebilirsiniz.");
+            authSection.style.display = 'none';
+            testContent.classList.remove('hidden');
+          }
+        } else {
+          alert("Giriş başarılı, ancak kullanıcı bilgileri bulunamadı. Teste erişebilirsiniz.");
+          authSection.style.display = 'none';
+          testContent.classList.remove('hidden');
+        }
+      } catch (error) {
+        alert("Giriş hatası: " + error.message);
+      }
+    });
+  </script>
+
+  <script>
+    // Test seçim butonları ve test içeriği kontrolü
+    const showA1Btn = document.getElementById('showA1');
+    const showA2Btn = document.getElementById('showA2');
+    const testA1 = document.getElementById('testA1');
+    const testA2 = document.getElementById('testA2');
+
+    showA1Btn.addEventListener('click', () => {
+      testA1.classList.remove('hidden');
+      testA2.classList.add('hidden');
+      showA1Btn.classList.add('active');
+      showA2Btn.classList.remove('active');
+      clearFeedback(document.getElementById('formA1'));
+      document.getElementById('resultA1').textContent = '';
+    });
+
+    showA2Btn.addEventListener('click', () => {
+      testA2.classList.remove('hidden');
+      testA1.classList.add('hidden');
+      showA2Btn.classList.add('active');
+      showA1Btn.classList.remove('active');
+      clearFeedback(document.getElementById('formA2'));
+      document.getElementById('resultA2').textContent = '';
+    });
+
+    // Cevapları kontrol etme fonksiyonu
+    function checkAnswers(level) {
+      let answers, form, resultDiv;
+      if (level === 'A1') {
+        answers = {
+          q1: 'am',
+          q2: 'Her',
+          q3: 'are',
+          q4: 'am',
+          q5: 'What',
+          q6: 'is',
+          q7: 'are',
+          q8: 'are',
+          q9: 'an',
+          q10: 'a'
+        };
+        form = document.getElementById('formA1');
+        resultDiv = document.getElementById('resultA1');
+      } else if (level === 'A2') {
+        answers = {
+          q1: 'goes',
+          q2: 'did',
+          q3: 'never',
+          q4: 'were having',
+          q5: 'rains',
+          q6: 'at',
+          q7: 'are',
+          q8: 'do',
+          q9: 'hasn\'t',
+          q10: 'will'
+        };
+        form = document.getElementById('formA2');
+        resultDiv = document.getElementById('resultA2');
+      } else {
+        return;
+      }
+
+      clearFeedback(form); // Önceki geri bildirimleri temizle
+
+      let score = 0;
+      for (let i = 1; i <= Object.keys(answers).length; i++) {
+        const q = 'q' + i;
+        const fieldset = form.querySelector(`fieldset:nth-of-type(${i})`);
+        const userAnswer = form.querySelector(`input[name="${q}"]:checked`);
+        const feedbackSpan = document.createElement('span');
+        feedbackSpan.classList.add('feedback');
+
+        if (!userAnswer) {
+          feedbackSpan.textContent = 'Seçilmedi';
+          feedbackSpan.classList.add('incorrect');
+          fieldset.appendChild(feedbackSpan);
+          continue;
+        }
+
+        if (userAnswer.value === answers[q]) {
+          score++;
+          feedbackSpan.textContent = '✓ Doğru';
+          feedbackSpan.classList.add('correct');
+        } else {
+          feedbackSpan.textContent = '✗ Yanlış';
+          feedbackSpan.classList.add('incorrect');
+        }
+
+        fieldset.appendChild(feedbackSpan);
+      }
+
+      resultDiv.textContent = `Doğru sayısı: ${score} / ${Object.keys(answers).length}`;
+    }
+
+    function clearFeedback(form) {
+      const feedbacks = form.querySelectorAll('.feedback');
+      feedbacks.forEach(fb => fb.remove());
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kids Quiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    .emoji {
+      font-size: 100px;
+      margin: 20px 0;
+    }
+    .options button {
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #result {
+      font-size: 22px;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+
+    .start-buttons button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    /* Form Container Styles (giris.html'den alındı) */
+    .form-container {
+      background-color: rgb(232, 192, 203);
+      padding: 20px 25px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 80%;
+      max-width: 300px;
+      margin: 20px auto; /* Ortalamak için */
+      display: none; /* Varsayılan olarak gizli olacak */
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border 0.3s;
+      box-sizing: border-box; /* Padding'in genişliği etkilemesini engelle */
+    }
+
+    .form-container input:focus {
+      border-color: #003366;
+      outline: none;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .form-container button:hover {
+      background-color: #005f73;
+    }
+
+    .form-container p {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .form-container a {
+      color: #003366;
+      text-decoration: none;
+    }
+    .form-container a:hover {
+      text-decoration: underline;
+    }
+
+    /* Sayfa yüklendiğinde quiz içeriğini gizle, formları göster veya tersi */
+    #quiz-content {
+      display: none; /* Varsayılan olarak quiz içeriğini gizle */
+    }
+    #auth-section {
+      text-align: center;
+      margin-top: 50px;
+    }
+    #auth-section h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+      <a href="index.html" style="text-decoration: none; color: black; font-weight: bold;">Anasayfa</a>
+  </header>
+
+  <div id="auth-section">
+    <h2>Quiz'e Erişmek İçin Lütfen Giriş Yapın veya Kayıt Olun</h2>
+
+    <div class="form-container" id="register-form">
+      <h2>Kayıt Ol</h2>
+      <form id="registerForm">
+        <input type="text" id="fullname" placeholder="Ad Soyad" required>
+        <input type="email" id="email" placeholder="E-posta" required>
+        <input type="number" id="telefon" placeholder="Telefon" required>
+        <input type="password" id="password" placeholder="Şifre" required>
+        <button type="submit">Kayıt Ol</button>
+      </form>
+      <p>Zaten üye misiniz? <a href="#" id="show-login">Giriş yap</a></p>
+    </div>
+
+    <div class="form-container" id="login-form">
+      <h2>Giriş Yap</h2>
+      <form id="loginForm">
+        <input type="email" id="login-email" placeholder="E-posta" required>
+        <input type="password" id="login-password" placeholder="Şifre" required>
+        <button type="submit">Giriş Yap</button>
+      </form>
+      <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt ol</a></p>
+    </div>
+  </div>
+
+
+  <div id="quiz-content">
+    <h2>🎉 Kids Quiz: Animals, Colors, Family, Fruits, Vehicles</h2>
+
+    <div id="start-screen">
+      <div class="start-buttons">
+        <button onclick="startQuiz('Animals')">Animals 🐶</button>
+        <button onclick="startQuiz('Colors')">Colors 🌈</button>
+        <button onclick="startQuiz('Family')">Family 👨‍👩‍👧‍👦</button>
+        <button onclick="startQuiz('Fruits')">Fruits 🍎</button>
+        <button onclick="startQuiz('Vehicles')">Vehicles 🚗</button>
+      </div>
+    </div>
+
+    <div id="quiz-container" class="hidden"></div>
+    <div id="feedback"></div>
+    <div id="result"></div>
+    <button id="home-button" onclick="goHome()" class="hidden">Anasayfaya Dön</button>
+  </div> <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA26XLG7jdLhyZ6HyzhuapXON-kCn0jNd4", // Kendi Firebase API anahtarınız
+      authDomain: "learnenglish-b0777.firebaseapp.com",
+      projectId: "learnenglish-b0777",
+      storageBucket: "learnenglish-b0777.appspot.com",
+      messagingSenderId: "547469954131",
+      appId: "1:547469954131:web:1869e9a6c702bffad04aa6",
+      measurementId: "G-6F3C3SXK32"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // HTML elementlerini al
+    const authSection = document.getElementById('auth-section'); // Yeni eklenen kısım
+    const registerFormContainer = document.getElementById('register-form');
+    const loginFormContainer = document.getElementById('login-form');
+    const quizContent = document.getElementById('quiz-content'); // testContent yerine quizContent
+
+    // Oturum durumuna göre formları veya quizi göster
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Kullanıcı giriş yapmışsa
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists() && userDocSnap.data().isAdmin) {
+          // Admin ise admin sayfasına yönlendir
+          window.location.href = "admin.html";
+        } else {
+          // Admin değilse veya belge bulunamazsa, quiz içeriğini göster
+          authSection.style.display = 'none'; // Yetkilendirme bölümünü gizle
+          quizContent.style.display = 'block'; // Quiz içeriğini göster
+        }
+      } else {
+        // Kullanıcı giriş yapmamışsa: Giriş/Kayıt formlarını göster
+        authSection.style.display = 'block'; // Yetkilendirme bölümünü göster
+        registerFormContainer.style.display = 'block'; // Başlangıçta kayıt formunu göster
+        loginFormContainer.style.display = 'none';
+        quizContent.style.display = 'none'; // Quiz içeriğini gizle
+      }
+    });
+
+    // Formlar arası geçiş
+    document.getElementById("show-login").addEventListener("click", (e) => {
+      e.preventDefault();
+      registerFormContainer.style.display = "none";
+      loginFormContainer.style.display = "block";
+    });
+
+    document.getElementById("show-register").addEventListener("click", (e) => {
+      e.preventDefault();
+      loginFormContainer.style.display = "none";
+      registerFormContainer.style.display = "block";
+    });
+
+    // Kayıt Formu Gönderme
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefon = document.getElementById("telefon").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          ad: fullname.split(" ")[0] || fullname,
+          soyad: fullname.split(" ")[1] || "",
+          email: email,
+          telefon: telefon,
+          isAdmin: false // Yeni kayıt olan kullanıcılara varsayılan olarak admin yetkisi verilmedi.
+        });
+
+        alert("Kayıt başarılı! Giriş yaptınız ve quiz'e erişebilirsiniz.");
+        // Başarılı kayıttan sonra quizi göster
+        authSection.style.display = 'none';
+        quizContent.style.display = 'block';
+
+      } catch (error) {
+        alert("Kayıt hatası: " + error.message);
+      }
+    });
+
+    // Giriş Formu Gönderme
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.isAdmin) {
+            alert("Giriş başarılı. Admin sayfasına yönlendiriliyorsun!");
+            window.location.href = "admin.html";
+          } else {
+            alert("Giriş başarılı. Quiz'e erişebilirsiniz.");
+            // Admin olmayanlar için quizi göster
+            authSection.style.display = 'none';
+            quizContent.style.display = 'block';
+          }
+        } else {
+          // Kullanıcı belgesi bulunamazsa (nadiren olur, ama hata yönetimi için)
+          alert("Giriş başarılı, ancak kullanıcı bilgileri bulunamadı. Quiz'e erişebilirsiniz.");
+          quizContent.style.display = 'block';
+          authSection.style.display = 'none';
+        }
+      } catch (error) {
+        alert("Giriş hatası: " + error.message);
+      }
+    });
+
+  </script>
+
+  <script>
+    const quizData = {
+      Animals: [
+        { emoji: "🐶", options: ["Cat", "Dog", "Bird"], answer: "Dog" },
+        { emoji: "🦁", options: ["Tiger", "Bear", "Lion"], answer: "Lion" },
+        { emoji: "🐘", options: ["Elephant", "Giraffe", "Monkey"], answer: "Elephant" },
+        { emoji: "🐠", options: ["Fish", "Dolphin", "Whale"], answer: "Fish" },
+        { emoji: "🦉", options: ["Owl", "Eagle", "Penguin"], answer: "Owl" }
+      ],
+      Colors: [
+        { emoji: "🔴", options: ["Blue", "Red", "Green"], answer: "Red" },
+        { emoji: "🔵", options: ["Yellow", "Red", "Blue"], answer: "Blue" },
+        { emoji: "🟢", options: ["Green", "Orange", "Purple"], answer: "Green" },
+        { emoji: "🟡", options: ["Yellow", "Pink", "Brown"], answer: "Yellow" },
+        { emoji: "🟣", options: ["Black", "Purple", "White"], answer: "Purple" }
+      ],
+      Family: [
+        { emoji: "👨", options: ["Mother", "Father", "Sister"], answer: "Father" },
+        { emoji: "👩", options: ["Brother", "Mother", "Grandpa"], answer: "Mother" },
+        { emoji: "👧", options: ["Son", "Daughter", "Uncle"], answer: "Daughter" },
+        { emoji: "👦", options: ["Girl", "Boy", "Baby"], answer: "Boy" },
+        { emoji: "👴", options: ["Grandma", "Grandpa", "Aunt"], answer: "Grandpa" }
+      ],
+      Fruits: [
+        { emoji: "🍎", options: ["Banana", "Apple", "Grape"], answer: "Apple" },
+        { emoji: "🍌", options: ["Orange", "Banana", "Cherry"], answer: "Banana" },
+        { emoji: "🍓", options: ["Kiwi", "Strawberry", "Melon"], answer: "Strawberry" },
+        { emoji: "🍇", options: ["Pear", "Peach", "Grape"], answer: "Grape" },
+        { emoji: "🍊", options: ["Apple", "Orange", "Lemon"], answer: "Orange" }
+      ],
+      Vehicles: [
+        { emoji: "🚗", options: ["Train", "Car", "Bike"], answer: "Car" },
+        { emoji: "🚌", options: ["Bus", "Truck", "Motorcycle"], answer: "Bus" },
+        { emoji: "🚲", options: ["Bicycle", "Car", "Bus"], answer: "Bicycle" },
+        { emoji: "🚢", options: ["Boat", "Ship", "Submarine"], answer: "Ship" },
+        { emoji: "✈️", options: ["Helicopter", "Plane", "Rocket"], answer: "Plane" }
+      ]
+    };
+
+    let questions = [];
+    let current = 0;
+    let score = 0;
+
+    function startQuiz(category) {
+      questions = quizData[category];
+      current = 0;
+      score = 0;
+      document.getElementById("start-screen").classList.add("hidden");
+      document.getElementById("quiz-container").classList.remove("hidden");
+      document.getElementById("home-button").classList.add("hidden"); // Quiz başladığında Anasayfa düğmesini gizle
+      document.getElementById("result").textContent = "";
+      document.getElementById("feedback").textContent = "";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        document.getElementById("quiz-container").innerHTML = "";
+        document.getElementById("feedback").textContent = "";
+        document.getElementById("result").textContent = `🎉 Quiz tamamlandı! Puanınız: ${score}/${questions.length}`;
+        document.getElementById("home-button").classList.remove("hidden"); // Quiz bitince Anasayfa düğmesini göster
+        return;
+      }
+
+      const q = questions[current];
+      const container = document.getElementById("quiz-container");
+      container.innerHTML = `
+        <div class="emoji">${q.emoji}</div>
+        <div class="options">
+          ${q.options.map(opt => `<button onclick="checkAnswer('${opt}')">${opt}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[current].answer;
+      if (selected === correct) {
+        score++;
+        document.getElementById("feedback").textContent = "✅ Doğru!";
+      } else {
+        document.getElementById("feedback").textContent = `❌ Yanlış! Doğru cevap: ${correct}`;
+      }
+
+      current++;
+      setTimeout(() => {
+        document.getElementById("feedback").textContent = "";
+        showQuestion();
+      }, 1000);
+    }
+
+    function goHome() {
+      document.getElementById('start-screen').classList.remove('hidden');
+      document.getElementById('quiz-container').classList.add('hidden');
+      document.getElementById('home-button').classList.add('hidden');
+      document.getElementById('result').textContent = "";
+      document.getElementById('feedback').textContent = "";
+    }
+  </script>
+
+</body>
+</html>

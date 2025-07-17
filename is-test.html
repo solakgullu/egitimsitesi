@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>İngilizce Seviye Testi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .tabs {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 10px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      background-color: #ddd;
+      font-weight: bold;
+      user-select: none;
+    }
+    .tab-btn.active {
+      background-color: #007BFF;
+      color: white;
+    }
+    h1 {
+      text-align: center;
+    }
+    .test-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 15px;
+    }
+    .question p {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .answers label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .answers input {
+      margin-right: 5px;
+    }
+    .result-icon {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    .form-container {
+      background-color: rgb(232, 192, 203);
+      padding: 20px 25px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 80%;
+      max-width: 300px;
+      margin: 20px auto;
+      display: none;
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border 0.3s;
+      box-sizing: border-box;
+    }
+    .form-container input:focus {
+      border-color: #003366;
+      outline: none;
+    }
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-container button:hover {
+      background-color: #005f73;
+    }
+    .form-container p {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .form-container a {
+      color: #003366;
+      text-decoration: none;
+    }
+    .form-container a:hover {
+      text-decoration: underline;
+    }
+    #auth-section {
+      text-align: center;
+      margin-top: 50px;
+    }
+    #auth-section h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+      <a href="index.html" style="text-decoration: none; color: black; font-weight: bold;">Anasayfa</a>
+  </header>
+
+  <div id="auth-section">
+    <h2>İngilizce Testlerine Erişmek İçin Lütfen Giriş Yapın veya Kayıt Olun</h2>
+
+    <div class="form-container" id="register-form">
+      <h2>Kayıt Ol</h2>
+      <form id="registerForm">
+        <input type="text" id="fullname" placeholder="Ad Soyad" required>
+        <input type="email" id="email" placeholder="E-posta" required>
+        <input type="number" id="telefon" placeholder="Telefon" required>
+        <input type="password" id="password" placeholder="Şifre" required>
+        <button type="submit">Kayıt Ol</button>
+      </form>
+      <p>Zaten üye misiniz? <a href="#" id="show-login">Giriş yap</a></p>
+    </div>
+
+    <div class="form-container" id="login-form">
+      <h2>Giriş Yap</h2>
+      <form id="loginForm">
+        <input type="email" id="login-email" placeholder="E-posta" required>
+        <input type="password" id="login-password" placeholder="Şifre" required>
+        <button type="submit">Giriş Yap</button>
+      </form>
+      <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt ol</a></p>
+    </div>
+  </div>
+
+  <div id="test-content" class="test-container hidden">
+    <h1>İngilizce Seviye Testi</h1>
+
+    <div class="tabs">
+      <span class="tab-btn active" id="tabC1">C1 Seviye Testi</span>
+      <span class="tab-btn" id="tabC2">C2 Seviye Testi</span>
+    </div>
+
+    <div id="testC1" class="test-content-level">
+      <div id="questionsC1"></div>
+      <button onclick="submitTest('C1')">Sonuçları Gör</button>
+      <div id="resultC1" class="result"></div>
+    </div>
+
+    <div id="testC2" class="test-content-level hidden">
+      <div id="questionsC2"></div>
+      <button onclick="submitTest('C2')">Sonuçları Gör</button>
+      <div id="resultC2" class="result"></div>
+    </div>
+    <br>
+    <a href="index.html">Anasayfaya dön</a>
+  </div> <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA26XLG7jdLhyZ6HyzhuapXON-kCn0jNd4", // Kendi Firebase API anahtarınız
+      authDomain: "learnenglish-b0777.firebaseapp.com",
+      projectId: "learnenglish-b0777",
+      storageBucket: "learnenglish-b0777.appspot.com",
+      messagingSenderId: "547469954131",
+      appId: "1:547469954131:web:1869e9a6c702bffad04aa6",
+      measurementId: "G-6F3C3SXK32"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // HTML elementlerini al
+    const authSection = document.getElementById('auth-section');
+    const registerFormContainer = document.getElementById('register-form');
+    const loginFormContainer = document.getElementById('login-form');
+    const testContent = document.getElementById('test-content');
+
+    // Oturum durumuna göre formları veya testi göster
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Kullanıcı giriş yapmışsa
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists() && userDocSnap.data().isAdmin) {
+          // Admin ise admin sayfasına yönlendir
+          window.location.href = "admin.html";
+        } else {
+          // Admin değilse veya belge bulunamazsa, test içeriğini göster
+          authSection.style.display = 'none';
+          testContent.classList.remove('hidden'); // 'hidden' sınıfını kaldır
+          // Sayfa yüklendiğinde varsayılan olarak C1 testi göster
+          showTest('C1', document.getElementById('tabC1'));
+        }
+      } else {
+        // Kullanıcı giriş yapmamışsa: Giriş/Kayıt formlarını göster
+        authSection.style.display = 'block';
+        registerFormContainer.style.display = 'block'; // Varsayılan olarak kayıt formunu göster
+        loginFormContainer.style.display = 'none';
+        testContent.classList.add('hidden'); // Test içeriğini gizle
+      }
+    });
+
+    // Formlar arası geçiş
+    document.getElementById("show-login").addEventListener("click", (e) => {
+      e.preventDefault();
+      registerFormContainer.style.display = "none";
+      loginFormContainer.style.display = "block";
+    });
+
+    document.getElementById("show-register").addEventListener("click", (e) => {
+      e.preventDefault();
+      loginFormContainer.style.display = "none";
+      registerFormContainer.style.display = "block";
+    });
+
+    // Kayıt Formu Gönderme
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefon = document.getElementById("telefon").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          ad: fullname.split(" ")[0] || fullname,
+          soyad: fullname.split(" ")[1] || "",
+          email: email,
+          telefon: telefon,
+          isAdmin: false
+        });
+
+        alert("Kayıt başarılı! Giriş yaptınız ve teste erişebilirsiniz.");
+        authSection.style.display = 'none';
+        testContent.classList.remove('hidden');
+        showTest('C1', document.getElementById('tabC1')); // Başarılı kayıttan sonra C1 testini göster
+
+      } catch (error) {
+        alert("Kayıt hatası: " + error.message);
+      }
+    });
+
+    // Giriş Formu Gönderme
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.isAdmin) {
+            alert("Giriş başarılı. Admin sayfasına yönlendiriliyorsun!");
+            window.location.href = "admin.html";
+          } else {
+            alert("Giriş başarılı. Teste erişebilirsiniz.");
+            authSection.style.display = 'none';
+            testContent.classList.remove('hidden');
+            showTest('C1', document.getElementById('tabC1')); // Başarılı girişten sonra C1 testini göster
+          }
+        } else {
+          alert("Giriş başarılı, ancak kullanıcı bilgileri bulunamadı. Teste erişebilirsiniz.");
+          authSection.style.display = 'none';
+          testContent.classList.remove('hidden');
+          showTest('C1', document.getElementById('tabC1')); // Başarılı girişten sonra C1 testini göster
+        }
+      } catch (error) {
+        alert("Giriş hatası: " + error.message);
+      }
+    });
+  </script>
+
+  <script>
+    const questions = {
+      C1: [
+        {
+          question: "1. The company's expansion plans were _____ by the sudden economic downturn.",
+          options: ["curtailed", "amplified", "initiated", "expedited"],
+          correct: 0 // Index of the correct answer
+        },
+        {
+          question: "2. His argument was so _____ that no one could refute it.",
+          options: ["cogent", "ambiguous", "superficial", "redundant"],
+          correct: 0
+        },
+        {
+          question: "3. She had an _____ ability to grasp complex concepts quickly.",
+          options: ["innate", "acquired", "transient", "peripheral"],
+          correct: 0
+        },
+        {
+          question: "4. The committee's decision was _____ upon further review.",
+          options: ["revoked", "enforced", "ratified", "deferred"],
+          correct: 0
+        },
+        {
+          question: "5. The detective found the witness's testimony to be highly _____.",
+          options: ["dubious", "credible", "lucid", "concise"],
+          correct: 0
+        },
+        {
+          question: "6. Despite the initial setbacks, the project finally reached its _____.",
+          options: ["culmination", "inception", "stagnation", "diversion"],
+          correct: 0
+        },
+        {
+          question: "7. The new policy is designed to _____ the bureaucratic process.",
+          options: ["streamline", "complicate", "obstruct", "intensify"],
+          correct: 0
+        },
+        {
+          question: "8. His continuous interruptions were a source of great _____ to the speaker.",
+          options: ["annoyance", "amusement", "encouragement", "diversion"],
+          correct: 0
+        },
+        {
+          question: "9. The ancient ruins were remarkably well-_____ despite centuries of exposure to the elements.",
+          options: ["preserved", "deteriorated", "excavated", "modified"],
+          correct: 0
+        },
+        {
+          question: "10. The sudden change in weather led to a _____ in the travel plans.",
+          options: ["disruption", "smoothness", "acceleration", "facilitation"],
+          correct: 0
+        }
+      ],
+      C2: [
+        {
+          question: "1. The professor's lecture was so _____ that it was difficult to follow.",
+          options: ["esoteric", "lucid", "succinct", "pedestrian"],
+          correct: 0
+        },
+        {
+          question: "2. Her _____ wit made her a formidable opponent in debates.",
+          options: ["incisive", "obtuse", "verbose", "meandering"],
+          correct: 0
+        },
+        {
+          question: "3. The artist's work is characterized by its _____ use of color.",
+          options: ["chimerical", "judicious", "ostentatious", "haphazard"],
+          correct: 1
+        },
+        {
+          question: "4. The economic forecast remained _____ despite the government's assurances.",
+          options: ["precarious", "stable", "robust", "resilient"],
+          correct: 0
+        },
+        {
+          question: "5. He exhibited a _____ disregard for the rules, leading to his dismissal.",
+          options: ["blatant", "subtle", "covert", "incidental"],
+          correct: 0
+        },
+        {
+          question: "6. The philosopher's theories were often _____ and difficult to comprehend.",
+          options: ["abstruse", "palpable", "pellucid", "tangible"],
+          correct: 0
+        },
+        {
+          question: "7. The committee was tasked with _____ the complex legal jargon into understandable terms.",
+          options: ["elucidating", "obfuscating", "conflating", "extrapolating"],
+          correct: 0
+        },
+        {
+          question: "8. The rare manuscript was discovered in a state of advanced _____.",
+          options: ["dilapidation", "preservation", "restoration", "renovation"],
+          correct: 0
+        },
+        {
+          question: "9. Her speech was full of _____ remarks that added nothing to the main point.",
+          options: ["superfluous", "pertinent", "concise", "pithy"],
+          correct: 0
+        },
+        {
+          question: "10. The novel's plot was so _____ that it kept the reader guessing until the very end.",
+          options: ["convoluted", "straightforward", "simplistic", "predictable"],
+          correct: 0
+        }
+      ]
+    };
+
+    let currentLevel = 'C1';
+
+    // Seviye testlerini göster/gizle
+    document.getElementById('tabC1').addEventListener('click', function() {
+      showTest('C1', this);
+    });
+
+    document.getElementById('tabC2').addEventListener('click', function() {
+      showTest('C2', this);
+    });
+
+    function showTest(level, clickedTab) {
+      currentLevel = level;
+      document.querySelectorAll('.test-content-level').forEach(div => {
+        div.classList.add('hidden');
+      });
+      document.getElementById('test' + level).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      clickedTab.classList.add('active');
+
+      renderQuestions(level);
+    }
+
+    function renderQuestions(level) {
+      const container = document.getElementById('questions' + level);
+      container.innerHTML = '';
+      const selectedQuestions = questions[level];
+
+      selectedQuestions.forEach((item, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question');
+        questionDiv.innerHTML = `
+          <p>${item.question}</p>
+          <div class="answers">
+            ${item.options.map((opt, i) => `
+              <label>
+                <input type="radio" name="q${index}" value="${i}">
+                ${opt}
+              </label>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(questionDiv);
+      });
+
+      document.getElementById('result' + level).innerText = ''; // Sonuç div'ini temizle
+    }
+
+    function submitTest(level) {
+      const selectedQuestions = questions[level];
+      let score = 0;
+      const form = document.getElementById('questions' + level);
+      const resultDiv = document.getElementById('result' + level);
+      resultDiv.innerHTML = ''; // Önceki sonuçları temizle
+
+      selectedQuestions.forEach((item, index) => {
+        const selected = form.querySelector(`input[name="q${index}"]:checked`);
+        const questionDiv = form.querySelectorAll('.question')[index];
+
+        // Önceki sonucu kaldır
+        const existingResult = questionDiv.querySelector('.result-icon');
+        if (existingResult) existingResult.remove();
+
+        const icon = document.createElement('span');
+        icon.classList.add('result-icon');
+        icon.style.marginLeft = '10px';
+        icon.style.fontWeight = 'bold';
+
+        if (selected && parseInt(selected.value) === item.correct) {
+          icon.textContent = ' ✅';
+          icon.style.color = 'green';
+          score++;
+        } else {
+          icon.textContent = ' ❌';
+          icon.style.color = 'red';
+        }
+
+        questionDiv.querySelector('p').appendChild(icon);
+      });
+
+      resultDiv.innerText = `Doğru Sayısı: ${score} / ${selectedQuestions.length}`;
+    }
+
+  </script>
+</body>
+</html>
